@@ -25,9 +25,9 @@ def process_data(feature_class, field_name, second_field, output_excel):
         count = int(result.getOutput(0))
         print(f"تم تحديد {count} كائنات لقيمة {value} في الحقل {field_name}.")
 
-        # حذف الاختيار السابق للاستعداد للاختيار التالي
+        #  حذف الاختيار السابق للاستعداد للاختيار التالي
         arcpy.management.SelectLayerByAttribute(selection_layer, "CLEAR_SELECTION")
-
+        # d
         # إضافة النتائج إلى قائمة النتائج
         results.append((value, count))
 
