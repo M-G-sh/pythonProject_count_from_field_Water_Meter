@@ -4,23 +4,23 @@ from openpyxl import Workbook
 
 
 def process_data(feature_class, field_name, second_field, output_excel):
-    # إنشاء طبقة نتيجة الاختيار
+    # Creating the selection layer
     selection_layer = arcpy.management.MakeFeatureLayer(feature_class, "تحديد")
 
-    # استعلام لاستخراج جميع القيم الموجودة في الحقل الأول
+    # Query to extract all values in the first field
     values = set([row[0] for row in arcpy.da.SearchCursor(feature_class, field_name)])
 
     results = []
 
     for value in values:
-        # تشكيل الشرط بناءً على القيمة الحالية
+        # Forming the condition based on the current value
         expression = f"'{value}'"
         where_clause = f"{field_name} = {expression} AND ({second_field} IS NOT NULL AND {second_field} <> 'Closed' AND {second_field} <> 'Not_Clear' AND {second_field} <> '0' AND {second_field}  <> 'مغلق ' )"
 
-        # تنفيذ الاختيار بناءً على الشرط المحدد
+        # Executing the selection based on the specified condition
         arcpy.management.SelectLayerByAttribute(selection_layer, "NEW_SELECTION", where_clause)
 
-        # عرض عدد الكائنات المحددة للقيمة الحالية
+        # Displaying the count of selected objects for the current value
         result = arcpy.GetCount_management(selection_layer)
         count = int(result.getOutput(0))
         print(f"تم تحديد {count} كائنات لقيمة {value} في الحقل {field_name}.")
